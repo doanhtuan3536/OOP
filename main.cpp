@@ -1,16 +1,17 @@
 #include "BigInteger.h"
 int main()
 {
-    BigInteger a(3334433444);
-    BigInteger b(500,1);
-    BigInteger resu = a*b;
+    BigInteger a(30001);
+    BigInteger b(763);
+    BigInteger c(1);
+    BigInteger resu = a/b;
     cout<< resu << endl;
-    // if(a < b)
+    // if(a == 5000)
     // {
-    //     cout << "a < b";
+    //     cout << "a == 0";
     // }
     // else
-    //     cout << "a >= b";
+    //     cout << "a != 0";
     // neu khong nap chong phep gan
     // sau khi thuc hien phep con, ket qua luu vao finalresult(hoac result neu a[0] ==1), return ve thi finalresult(hoac result) se gan vao mot bien ko ten, sau do xoa luon finalresult va result
     // dong thoi xoa luon bien tam ko ten do

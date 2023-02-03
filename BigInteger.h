@@ -436,9 +436,79 @@ public:
         }
         return result;
     }
-    bool operator<(const long long &b)
+    // bool operator<(const long long &b)
+    // {
+    //     if(this->sign == false && b > 0)
+    //     {
+    //         return true;
+    //     }
+    // }
+    BigInteger operator/(BigInteger & b)
     {
-        
+        try
+        {
+            if(b == 0)
+                throw "error divide by 0";
+        }
+        catch(const char * c)
+        {
+            cout << c<< endl;
+        }
+        BigInteger result(0);
+        if(*this == 0)
+        {
+            return result;
+        }
+        if(*this == b)
+        {
+            BigInteger temp(1);
+            return result;
+        }
+        if(*this < b)
+        {
+            return result;
+        }
+        else
+        {
+            short Nthis = this->getNdigit();
+            short Nb = b.getNdigit();
+            BigInteger tmp(b);
+            for (int i = 0; i < Nb; i++)
+            {
+                tmp.a[i] = this->a[i]; 
+            }
+            // luu thuong khi chia bien tam cho this 
+            int t = 0;
+            BigInteger remainder(0);
+            for (int i = 1; i < 10; i++)
+            {
+                if(i*b > tmp)
+                {
+                    result = result*10 + i-1;
+                    t = i-1;
+                    break;
+                }
+            }
+            remainder = tmp - t * b;
+            int m = Nb-1;
+            while(m < Nthis-1)
+            {
+                remainder = remainder*10 + this->a[m+1] - 48; 
+                t = 0;
+                for (int i = 1; i <= 10; i++)
+                {
+                    if(i*b > remainder)
+                    {
+                        result = result*10 + i-1;
+                        t = i-1;
+                        break;
+                    }
+                }
+                remainder = remainder - t * b;
+                m++;
+            }
+            return result;
+        }
     }
     bool operator<(const BigInteger&b)
     {
@@ -470,6 +540,36 @@ public:
         }
         return false;
     }
+    bool operator>(const BigInteger&b)
+    {
+        if(this->sign == true && b.sign == false)
+        {
+            return true;
+        }
+        else if(this->sign == b.sign)
+        {
+            short thisN = this->getNdigit();
+            short bN = b.getNdigit();
+            if((thisN > bN && this->sign == true)||(thisN < bN && this->sign == false))
+            {
+                return true;
+            }
+            else if(thisN == bN)
+            {
+                for (int i = 0; i < thisN; i++)
+                {
+                    if((this->a[i] > b.a[i] && this->sign == true) || (this->a[i] < b.a[i] && this->sign == false))
+                    {
+                        return true;
+                    }
+                    else if ((this->a[i] < b.a[i] && this->sign == true) || (this->a[i] > b.a[i] && this->sign == false)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     bool operator==(const BigInteger&b)
     {
         if(this->sign != b.sign)return false;
@@ -486,6 +586,38 @@ public:
                 {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+    bool operator==(const long long&b)
+    {
+        if(this->sign == true && b < 0 || this->sign == false && b > 0)return false;
+        short thisN = this->getNdigit();
+        short bN = 0;
+        long long tmp = b;
+        if(b == 0)bN = 1;
+        else
+        {
+            while(tmp > 0)
+            {
+                bN++;
+                tmp/=10;
+            }
+        }
+        if(thisN != bN)
+        {
+            return false;
+        }
+        else{
+            tmp = b;
+            for (int i = thisN-1; i >= 0; i--)
+            {
+                if(this->a[i] != tmp%10+48)
+                {
+                    return false;
+                }
+                tmp/=10;
             }
         }
         return true;
