@@ -268,13 +268,17 @@ public:
                 k--;
             }
             // cout << result << endl;
-            if(carry != 0)
+            if(carry != 0 || (carry1 == 1 && i == 0))
             {
                 result.a[k] = 0 + carry+carry1 + 48;
             }
             // cout << result << endl;
         }
         // cout << result << endl;
+        // if(carry1 == 1)
+        // {
+        //     result.a[k] = 49;
+        // }
         if(result.a[0] == 48)
         {
             short Num0 = 0;
@@ -455,6 +459,10 @@ public:
             cout << c<< endl;
         }
         BigInteger result(0);
+        bool checksign = false;
+        if(this->sign == b.sign)checksign= true;
+        this->ABS();
+        b.ABS();
         if(*this == 0)
         {
             return result;
@@ -464,7 +472,7 @@ public:
             BigInteger temp(1);
             return result;
         }
-        if(*this < b)
+        if(*this < b && this->sign != false)
         {
             return result;
         }
@@ -507,7 +515,74 @@ public:
                 remainder = remainder - t * b;
                 m++;
             }
+            if(checksign) result.sign = true;
+            else result.sign = false;
             return result;
+        }
+    }
+    BigInteger operator%(BigInteger & b)
+    {
+        try
+        {
+            if(b == 0)
+                throw "error % by 0";
+        }
+        catch(const char * c)
+        {
+            cout << c<< endl;
+        }
+        BigInteger result(0);
+        if(*this == 0)
+        {
+            return result;
+        }
+        if(*this == b)
+        {
+            return result;
+        }
+        if(*this < b)
+        {
+            result = *this;
+            return result;
+        }
+        else
+        {
+            short Nthis = this->getNdigit();
+            short Nb = b.getNdigit();
+            BigInteger tmp(b);
+            for (int i = 0; i < Nb; i++)
+            {
+                tmp.a[i] = this->a[i]; 
+            }
+            // luu thuong khi chia bien tam cho this 
+            int t = 0;
+            BigInteger remainder(0);
+            for (int i = 1; i < 10; i++)
+            {
+                if(i*b > tmp)
+                {
+                    t = i-1;
+                    break;
+                }
+            }
+            remainder = tmp - t * b;
+            int m = Nb-1;
+            while(m < Nthis-1)
+            {
+                remainder = remainder*10 + this->a[m+1] - 48; 
+                t = 0;
+                for (int i = 1; i <= 10; i++)
+                {
+                    if(i*b > remainder)
+                    {
+                        t = i-1;
+                        break;
+                    }
+                }
+                remainder = remainder - t * b;
+                m++;
+            }
+            return remainder;
         }
     }
     bool operator<(const BigInteger&b)
@@ -655,6 +730,15 @@ public:
         if(b.a != NULL)
             out <<((b.sign == false) ? "-" : "")<<b.a;
         return out;
+    }
+    BigInteger operator^(const long long &b)
+    {
+        BigInteger result(1);
+        for (int i = 0; i < b; i++)
+        {
+            result = result*(*this);
+        }
+        return result;
     }
     ~BigInteger()
     {

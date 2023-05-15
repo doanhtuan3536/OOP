@@ -1,10 +1,10 @@
 #include "BigInteger.h"
 int main()
 {
-    BigInteger a(30001);
-    BigInteger b(763);
+    BigInteger a(30001222222);
+    BigInteger b(29993);
     BigInteger c(1);
-    BigInteger resu = a/b;
+    BigInteger resu = a%b;
     cout<< resu << endl;
     // if(a == 5000)
     // {
