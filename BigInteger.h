@@ -14,6 +14,16 @@ public:
         a[0] = '\0';
         sign = true;
     }
+    BigInteger(string b)
+    {
+        a = new char[b.length()+1];
+        for (int i = 0; i < b.length()+1; i++)
+        {
+            a[i] = b[i];
+        }
+        a[b.length()] = '\0';
+        sign = true;
+    }
     BigInteger(const BigInteger &b)
     {
         this->sign = b.sign;
